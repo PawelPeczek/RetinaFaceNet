@@ -78,7 +78,8 @@ class RetinaFaceNet:
     def infer(self, image: np.ndarray) -> List[RetinaFaceNetPrediction]:
         image_height, image_width = image.shape[:2]
         image = self.__standardise_input(image=image)
-        bboxes, confidence, landmarks = self.__model(image)
+        with torch.no_grad():
+            bboxes, confidence, landmarks = self.__model(image)
         prior_boxes = self.__prepare_prior_boxes(
             image_height=image_height,
             image_width=image_width
@@ -149,7 +150,7 @@ class RetinaFaceNet:
             variances=CONFIG_RESNET_50['variance']
         )
         shape_list = [
-            input_tensor.shape[1], input_tensor.shape[0]
+            input_tensor.shape[3], input_tensor.shape[2]
         ] * 2
         image_scale = torch.Tensor(shape_list)
         image_scale = image_scale.to(self.__device)
