@@ -70,6 +70,7 @@ class RetinaFaceNet:
                  nms_threshold: float
                  ):
         self.__model = model
+        self.__model.eval()
         self.__device = device
         self.__confidence_threshold = confidence_threshold
         self.__top_k = top_k
